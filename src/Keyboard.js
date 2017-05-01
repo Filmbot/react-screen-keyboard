@@ -17,6 +17,9 @@ export default class Keyboard extends PureComponent {
 		inputNode: PropTypes.any.isRequired,
 		onClick: PropTypes.func,
 		isFirstLetterUppercase: PropTypes.bool,
+		shiftEnabled: PropTypes.bool,
+		symbolsEnabled: PropTypes.bool,
+		spaceEnabled: PropTypes.bool,
 		layouts: PropTypes.arrayOf(PropTypes.shape({
 			symbolsKeyValue: PropTypes.string,
 			layout: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
@@ -27,6 +30,9 @@ export default class Keyboard extends PureComponent {
 		leftButtons: [],
 		rightButtons: [],
 		isFirstLetterUppercase: false,
+		shiftEnabled: true,
+		symbolsEnabled: true,
+		spaceEnabled: true,
 		layouts: [CyrillicLayout, LatinLayout],
 	};
 
@@ -103,8 +109,8 @@ export default class Keyboard extends PureComponent {
 	isUppercase() {
 		const {inputNode, isFirstLetterUppercase} = this.props;
 		return inputNode.type !== 'password' &&
-			inputNode.dataset.type !== 'email' &&
-			!inputNode.value.length && isFirstLetterUppercase;
+				inputNode.dataset.type !== 'email' &&
+				!inputNode.value.length && isFirstLetterUppercase;
 	}
 
 	getKeys() {
@@ -174,11 +180,13 @@ export default class Keyboard extends PureComponent {
 				</div>
 
 				<div className="keyboard-row">
-					<KeyboardButton
-						value={<ShiftIcon />}
-						classes="keyboard-shiftButton"
-						onClick={this.handleShiftClick}
-					/>
+					{!!shiftEnabled ?
+						<KeyboardButton
+							value={<ShiftIcon />}
+							onClick={this.handleShiftClick}
+						/>
+						:
+						[<div className="keyboard-halfButton" key="hb1" />, <div className="keyboard-halfButton" key="hb2" />]}
 					{keys[2].map(button =>
 						<KeyboardButton
 							value={button}
@@ -186,11 +194,13 @@ export default class Keyboard extends PureComponent {
 							key={button}
 						/>
 					)}
-					<KeyboardButton
-						value={symbolsKeyValue}
-						classes="keyboard-symbolButton"
-						onClick={this.handleSymbolsClick}
-					/>
+					{!!symbolsEnabled ?
+						<KeyboardButton
+							value={symbolsKeyValue}
+							onClick={this.handleSymbolsClick}
+						/>
+						:
+						[<div className="keyboard-halfButton" key="hb3" />, <div className="keyboard-halfButton" key="hb4" />]}
 				</div>
 
 				<div className="keyboard-row">
@@ -198,26 +208,24 @@ export default class Keyboard extends PureComponent {
 					{this.props.layouts.length > 1 ?
 						<KeyboardButton
 							value={<LanguageIcon />}
-							classes="keyboard-languageButton"
 							onClick={this.handleLanguageClick}
 						/>
 					: null}
 					{inputNode.dataset.type === 'email' ?
 						<KeyboardButton
 							value={'@'}
-							classes="keyboard-atButton"
 							onClick={this.handleLetterButtonClick}
 						/>
-					: null}
+							: null}
+					{!!spaceEnabled &&
 					<KeyboardButton
 						value={' '}
-						classes="keyboard-spaceButton"
+						classes="keyboard-space"
 						onClick={this.handleLetterButtonClick}
-					/>
+					/>}
 					{inputNode.dataset.type === 'email' ?
 						<KeyboardButton
 							value={'.'}
-							classes="keyboard-fullstopButton"
 							onClick={this.handleLetterButtonClick}
 						/>
 					: null}
