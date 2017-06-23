@@ -134,7 +134,7 @@ export default class Keyboard extends PureComponent {
 	}
 
 	render() {
-		const {leftButtons, rightButtons, inputNode} = this.props;
+		const {leftButtons, rightButtons, inputNode, shiftEnabled, symbolsEnabled, spaceEnabled} = this.props;
 		const keys = this.getKeys();
 		const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 		const symbolsKeyValue = this.getSymbolsKeyValue();
@@ -146,7 +146,7 @@ export default class Keyboard extends PureComponent {
 						<KeyboardButton
 							value={button}
 							onClick={this.handleLetterButtonClick}
-							classes="keyboard-numberButton"
+							classes={'keyboard-numberButton'}
 							key={button}
 						/>
 					)}
